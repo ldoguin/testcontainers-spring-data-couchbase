@@ -26,7 +26,7 @@ import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {TestcontainerSpringDataCouchbaseApplication.class, TestcontainerSpringDataCouchbaseApplicationTests.CouchbaseTestConfig.class})
-public class AbstractSPDataTestConfig {
+public abstract class AbstractSPDataTestConfig {
 
     public static final String clusterUser = "Administrator";
     public static final String clusterPassword = "password";
