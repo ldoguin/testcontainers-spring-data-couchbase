@@ -11,8 +11,10 @@ import com.couchbase.client.java.env.CouchbaseEnvironment;
 import org.junit.ClassRule;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.couchbase.config.AbstractCouchbaseConfiguration;
+import org.springframework.data.couchbase.config.CouchbaseConfigurer;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -41,7 +43,7 @@ public abstract class AbstractSPDataTestConfig {
             .withClusterPassword(clusterPassword);
 
     @Configuration
-    static class CouchbaseTestConfig extends AbstractCouchbaseConfiguration {
+    static class CouchbaseTestConfig implements CouchbaseConfigurer {
 
         private CouchbaseContainer couchbaseContainer;
 
@@ -62,16 +64,19 @@ public abstract class AbstractSPDataTestConfig {
         }
 
         @Override
+        @Bean
         public CouchbaseEnvironment couchbaseEnvironment() {
             return couchbaseContainer.getCouchbaseEnvironnement();
         }
 
         @Override
+        @Bean
         public Cluster couchbaseCluster() throws Exception {
             return couchbaseContainer.geCouchbaseCluster();
         }
 
         @Override
+        @Bean
         public ClusterInfo couchbaseClusterInfo() throws Exception {
             Cluster cc = couchbaseCluster();
             ClusterManager manager = cc.clusterManager(clusterUser, clusterPassword);
@@ -79,23 +84,10 @@ public abstract class AbstractSPDataTestConfig {
         }
 
         @Override
+        @Bean
         public Bucket couchbaseClient() throws Exception {
             return couchbaseContainer.geCouchbaseCluster().openBucket("default");
         }
 
-        @Override
-        protected List<String> getBootstrapHosts() {
-            return Arrays.asList("localhost");
-        }
-
-        @Override
-        protected String getBucketName() {
-            return "default";
-        }
-
-        @Override
-        protected String getBucketPassword() {
-            return "";
-        }
     }
 }
